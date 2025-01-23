@@ -1,20 +1,20 @@
 import { hook } from "../react/hook";
 import type { FreeVNode, VNode } from "../type";
 
-type SEGCallback = <C extends FreeVNode[]>(
+type SEGCallback = (
     attrs: {[key: string]: string | (()=>string)},
     on: {
         [key in keyof HTMLElementEventMap]?: 
         (e: HTMLElementEventMap[key]) => void
     },
-    ...children: C) => VNode<HTMLElement, C>
+    ...children: FreeVNode[]) => VNode<HTMLElement>
 
 export const seg: {[key: string]: SEGCallback} = new Proxy({},{
     get(_, prop){
         if(typeof prop == "string"){
             const callback: SEGCallback = (attrs, on, ...children) => {
                 const el = document.createElement(prop);
-                const vnode: VNode<HTMLElement, typeof children> = {
+                const vnode: VNode<HTMLElement> = {
                     node: el,
                     children: children,
                     vars: []
