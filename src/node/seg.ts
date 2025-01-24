@@ -33,7 +33,7 @@ export const seg: {[key: string]: SEGCallback} = new Proxy({},{
                 let i = 0;
                 children.forEach(e=>{
                     if(typeof e == "function"){
-
+                        e(el);
                     }else{
                         el.appendChild(e.node);
                         i++;
