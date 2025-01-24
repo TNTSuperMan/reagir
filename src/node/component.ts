@@ -2,7 +2,7 @@ import { watchVarDefines } from "../react/watch";
 import type { Component, FreeVNode, VNode } from "../type";
 
 
-export const createComponent = <P extends object, N extends Node | undefined>
+export const createComponent = <P extends object, N extends Node>
         (component: Component<P,N>): ((props: P) => VNode<N>) => 
         (props) => {
     let vnode: VNode<N> | undefined;

@@ -1,5 +1,5 @@
 import { hook } from "../react/hook";
-import type { FreeVNode, VNode } from "../type";
+import type { FragmentNode, FreeVNode, VNode } from "../type";
 
 type SEGCallback = (
     attrs: {[key: string]: string | (()=>string)},
@@ -7,7 +7,7 @@ type SEGCallback = (
         [key in keyof HTMLElementEventMap]?: 
         (e: HTMLElementEventMap[key]) => void
     },
-    ...children: FreeVNode[]) => VNode<HTMLElement>
+    ...children: (FreeVNode | FragmentNode)[]) => VNode<HTMLElement>
 
 export const seg: {[key: string]: SEGCallback} = new Proxy({},{
     get(_, prop){
@@ -16,7 +16,7 @@ export const seg: {[key: string]: SEGCallback} = new Proxy({},{
                 const el = document.createElement(prop);
                 const vnode: VNode<HTMLElement> = {
                     node: el,
-                    children: children,
+                    children: [],
                     vars: []
                 }
                 Object.entries<string | (()=>string)>(attrs).forEach(e=>{
@@ -30,12 +30,13 @@ export const seg: {[key: string]: SEGCallback} = new Proxy({},{
                 const on_: any = Object.entries(on);
                 const _on: [string, ()=>void][] = on_;
                 _on.forEach(e=>el.addEventListener(...e))
+                let i = 0;
                 children.forEach(e=>{
-                    if(e.node)
-                        el.appendChild(e.node)
-                    else{
-                        const mapper = (e: FreeVNode): Node[] => e.node ? [e.node] : e.children.map(e=>mapper(e)).flat();
-                        el.append(...mapper(e))
+                    if(typeof e == "function"){
+
+                    }else{
+                        el.appendChild(e.node);
+                        i++;
                     }
                 })
                 return vnode;
