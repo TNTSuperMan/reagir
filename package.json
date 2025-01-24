@@ -10,6 +10,6 @@
   },
   "scripts": {
     "build": "tsc && bun build.ts",
-    "build-sample": "bun build sample/sample.ts"
+    "build-sample": "bun build sample/sample.ts --minify --outdir sample"
   }
 }
