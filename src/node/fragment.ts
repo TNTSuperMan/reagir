@@ -5,7 +5,7 @@ type FNode = {
     key: unknown,
     node: ()=>FreeVNode
 }
-export const v2fnode = (key: unknown, node: ()=>FreeVNode): FNode => ({
+export const fnode = (key: unknown, node: ()=>FreeVNode): FNode => ({
     key, node
 })
 
