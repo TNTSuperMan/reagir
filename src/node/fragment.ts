@@ -14,6 +14,7 @@ export const fragment = (children: ()=>FNode[]): FragmentNode =>
     let before: unknown[] = [];
     const entry = document.createComment("");
     el.appendChild(entry);
+    console.log(el)
     hook(children, fnodes=>{
         let currentNode: ChildNode = entry;
         const iterate = (count: number) => {
@@ -29,6 +30,7 @@ export const fragment = (children: ()=>FNode[]): FragmentNode =>
                 el.replaceChild(currentNode, iterate(k - i));
                 oldcount--;
             }else{
+                console.log(currentNode)
                 el.insertBefore(currentNode, e.node().node);
             }
         })
