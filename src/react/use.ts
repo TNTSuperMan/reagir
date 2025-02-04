@@ -1,9 +1,8 @@
 import { rehookByFunc } from "./hook";
 import { last } from "./watch";
 
-export const proxies: WeakMap<object, {
-    forceReference: (effect: ()=>void)=>void
-}> = new WeakMap;
+export const proxies: WeakMap<object, 
+    (effect: ()=>void)=>void> = new WeakMap;
 
 export const useObject = <T extends object>(target: T): T => {
     const forcedDeps: Function[] = [];//target, callback
@@ -28,10 +27,8 @@ export const useObject = <T extends object>(target: T): T => {
             return setres;
         }
     })
-    proxies.set(proxy, {
-        forceReference(effect){
-            forcedDeps.push(effect);
-        }
+    proxies.set(proxy, effect=>{
+        forcedDeps.push(effect);
     });
     const l = last();
     if(l?.mode == "component") l.vars.push(proxy);

@@ -14,11 +14,7 @@ export const seg: {[key: string]: SEGCallback} = new Proxy({},{
         if(typeof prop == "string"){
             const callback: SEGCallback = (attrs, on, ...children) => {
                 const el = document.createElement(prop);
-                const vnode: VNode<HTMLElement> = {
-                    node: el,
-                    children: [],
-                    vars: []
-                }
+                const vnode: VNode<HTMLElement> = [ el, [], [] ]
                 Object.entries<string | (()=>string)>(attrs).forEach(e=>{
                     if(typeof e[1] == "string"){
                         el.setAttribute(e[0], e[1]);
@@ -35,7 +31,7 @@ export const seg: {[key: string]: SEGCallback} = new Proxy({},{
                     if(typeof e == "function"){
                         e(el);
                     }else{
-                        el.appendChild(e.node);
+                        el.appendChild(e[0]);
                         i++;
                     }
                 })

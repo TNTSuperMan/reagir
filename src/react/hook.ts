@@ -16,7 +16,7 @@ export const rehookByFunc = <T>(token: symbol, target: ()=>T, effect: (e: T)=>vo
 const hookByFunc = <T>(target: ()=>T, effect: (e: T)=>void) =>
     rehookByFunc(Symbol(), target, effect);
 const hookByObject = <T extends object>(target: T, effect: (e: T)=>void) =>
-    proxies.get(target)?.forceReference(()=>effect(target));
+    proxies.get(target)?.(()=>effect(target));
 
 export function hook<T>(target: ()=>T, effect: (e: T)=>void): void;
 export function hook<T extends object>(target: T, effect: (e: T)=>void): void;

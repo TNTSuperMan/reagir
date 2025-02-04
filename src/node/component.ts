@@ -8,10 +8,6 @@ export const createComponent = <P extends object, N extends Node>
     let vnode: VNode<N> | undefined;
     const vars = watchVarDefines(()=>vnode = component(props));
     if(!vnode) throw new Error("Cannot initialize component", {cause: component});
-    const wrap_vnode: VNode<N> = {
-        node: vnode.node,
-        children: vnode.children,
-        vars
-    }
+    const wrap_vnode: VNode<N> = [vnode[0], vnode[1], vars]
     return wrap_vnode;
 }
