@@ -1,5 +1,6 @@
 import { hook } from "../react/hook";
 import type { FragmentNode, FreeVNode, VNode } from "../type";
+import { isFunction, isString } from "../utils";
 
 type SEGCallback = (
     attrs: {[key: string]: string | (()=>string)},
@@ -11,12 +12,12 @@ type SEGCallback = (
 
 export const seg: {[key: string]: SEGCallback} = new Proxy({},{
     get(_, prop){
-        if(typeof prop == "string"){
+        if(isString(prop)){
             const callback: SEGCallback = (attrs, on, ...children) => {
                 const el = document.createElement(prop);
                 const vnode: VNode<HTMLElement> = [ el, [], [] ]
                 Object.entries<string | (()=>string)>(attrs).forEach(e=>{
-                    if(typeof e[1] == "string"){
+                    if(isString(e[1])){
                         el.setAttribute(e[0], e[1]);
                     }else{
                         hook(e[1], t=>
@@ -28,7 +29,7 @@ export const seg: {[key: string]: SEGCallback} = new Proxy({},{
                 _on.forEach(e=>el.addEventListener(...e))
                 let i = 0;
                 children.forEach(e=>{
-                    if(typeof e == "function"){
+                    if(isFunction(e)){
                         e(el);
                     }else{
                         el.appendChild(e[0]);

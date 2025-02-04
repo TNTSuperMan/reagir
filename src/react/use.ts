@@ -10,7 +10,7 @@ export const useObject = <T extends object>(target: T): T => {
     const proxy = new Proxy(target, {
         get(t, p, r){
             const l = last();
-            if(l?.mode == WatchMode.watchFn && typeof l.target == "function")
+            if(l?.mode == WatchMode.watchFn)
                 deps.push([p, l.token, l.target, l.effect])
             return Reflect.get(t, p, r);
         },
