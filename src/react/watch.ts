@@ -3,27 +3,24 @@ export const enum WatchMode{
     watchFn
 }
 
-export type WatchInfo<T = any> = ({
-    mode: WatchMode.component,
-    vars: object[]
-} | {
-    mode: WatchMode.watchFn,
-    token: symbol,
-    effect: (e: T) => void,
-    target: () => T
-})
+export type WatchInfo<T = any> = ([
+    WatchMode.component,
+    object[] //Vars
+] | [
+    WatchMode.watchFn,
+    symbol,
+    () => T, //Target
+    (e: T) => void //Callback
+])
 export const WatchingInfos: WatchInfo[] = [];
 export const last = (): WatchInfo | undefined => WatchingInfos[WatchingInfos.length-1]
 
 export const watchVarDefines = (callback: ()=>void) => {
-    WatchingInfos.push({
-        mode: WatchMode.component,
-        vars: []
-    })
+    WatchingInfos.push([WatchMode.component, []])
     callback();
     const res = WatchingInfos.pop();
-    if(res?.mode == WatchMode.component){
-        return res.vars;
+    if(res?.[0] == WatchMode.component){
+        return res[1];
     }else{
         throw new Error("Cannot pop component watch state")
     }

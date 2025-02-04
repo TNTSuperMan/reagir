@@ -10,8 +10,8 @@ export const useObject = <T extends object>(target: T): T => {
     const proxy = new Proxy(target, {
         get(t, p, r){
             const l = last();
-            if(l?.mode == WatchMode.watchFn)
-                deps.push([p, l.token, l.target, l.effect])
+            if(l?.[0] == WatchMode.watchFn)
+                deps.push([p, l[1], l[2], l[3]])
             return Reflect.get(t, p, r);
         },
         set(t, p, v, r){
@@ -31,7 +31,7 @@ export const useObject = <T extends object>(target: T): T => {
         forcedDeps.push(effect);
     });
     const l = last();
-    if(l?.mode == WatchMode.component) l.vars.push(proxy);
+    if(l?.[0] == WatchMode.component) l[1].push(proxy);
     return proxy;
 }
 
