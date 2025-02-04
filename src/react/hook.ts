@@ -1,9 +1,9 @@
 import { proxies } from "./use";
-import { WatchingInfos, type WatchInfo } from "./watch";
+import { WatchingInfos, WatchMode, type WatchInfo } from "./watch";
 
 export const rehookByFunc = <T>(token: symbol, target: ()=>T, effect: (e: T)=>void) => {
     const watchinfo: WatchInfo<T> = {
-        mode: "watchFn",
+        mode: WatchMode.watchFn,
         token: token,
         effect: effect,
         target
