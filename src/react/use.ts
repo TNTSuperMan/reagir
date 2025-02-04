@@ -1,5 +1,5 @@
 import { rehookByFunc } from "./hook";
-import { last } from "./watch";
+import { last, WatchMode } from "./watch";
 
 export const proxies: WeakMap<object, 
     (effect: ()=>void)=>void> = new WeakMap;
@@ -10,7 +10,7 @@ export const useObject = <T extends object>(target: T): T => {
     const proxy = new Proxy(target, {
         get(t, p, r){
             const l = last();
-            if(l?.mode == "watchFn" && typeof l.target == "function")
+            if(l?.mode == WatchMode.watchFn && typeof l.target == "function")
                 deps.push([p, l.token, l.target, l.effect])
             return Reflect.get(t, p, r);
         },
@@ -31,7 +31,7 @@ export const useObject = <T extends object>(target: T): T => {
         forcedDeps.push(effect);
     });
     const l = last();
-    if(l?.mode == "component") l.vars.push(proxy);
+    if(l?.mode == WatchMode.component) l.vars.push(proxy);
     return proxy;
 }
 
