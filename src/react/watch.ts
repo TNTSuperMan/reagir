@@ -8,7 +8,7 @@ export type WatchInfo<T = any> = ([
     object[] //Vars
 ] | [
     WatchMode.watchFn,
-    symbol,
+    {},
     () => T, //Target
     (e: T) => void //Callback
 ])

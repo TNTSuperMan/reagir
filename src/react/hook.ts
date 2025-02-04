@@ -1,7 +1,7 @@
 import { proxies } from "./use";
 import { WatchingInfos, WatchMode, type WatchInfo } from "./watch";
 
-export const rehookByFunc = <T>(token: symbol, target: ()=>T, effect: (e: T)=>void) => {
+export const rehookByFunc = <T>(token: {}, target: ()=>T, effect: (e: T)=>void) => {
     const watchinfo: WatchInfo<T> = [
         WatchMode.watchFn,
         token,
@@ -14,7 +14,7 @@ export const rehookByFunc = <T>(token: symbol, target: ()=>T, effect: (e: T)=>vo
     effect(td);
 }
 const hookByFunc = <T>(target: ()=>T, effect: (e: T)=>void) =>
-    rehookByFunc(Symbol(), target, effect);
+    rehookByFunc({}, target, effect);
 const hookByObject = <T extends object>(target: T, effect: (e: T)=>void) =>
     proxies.get(target)?.(()=>effect(target));
 

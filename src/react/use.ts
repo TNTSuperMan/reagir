@@ -6,7 +6,7 @@ export const proxies: WeakMap<object,
 
 export const useObject = <T extends object>(target: T): T => {
     const forcedDeps: Function[] = [];//target, callback
-    let deps: [PropertyKey, symbol, ()=>unknown, (e:unknown)=>void][] = [];
+    let deps: [PropertyKey, {}, ()=>unknown, (e:unknown)=>void][] = [];
     const proxy = new Proxy(target, {
         get(t, p, r){
             const l = last();
