@@ -1,22 +1,22 @@
-import { fragment, seg, t, usePrimitive, fnode } from "../src";
+import { fragment, seg, t, usePrimitive, useObject, hook } from "../src";
 
 const Comp = () => {
-    const count = usePrimitive(0);
-    console.log(count)
+    const text = usePrimitive("");
+    const list = useObject<string[]>([]);
     return seg.div({
         id: "vue"
     },{},
-        t("hello"),
+        seg.input({},{
+            change(e){
+                text.value = (e.target as HTMLInputElement).value;
+            }
+        }),
         seg.button({},{
             click(){
-                count.value++;
+                list.push(text.value);
             }
-        }, t("count:"), t(()=>count.value.toString())),
-        fragment(()=>[
-            fnode("one",()=>t("Least")),
-            fnode("two",()=>t("Signed")),
-            fnode("three",()=>t("Radix")),
-        ])
+        }, t("push")),
+        fragment(()=>list.map(e=>t(e)))
     )
 }
-document.body.appendChild(Comp().node)
+document.body.appendChild(Comp()[0])
