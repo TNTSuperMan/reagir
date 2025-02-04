@@ -2,12 +2,12 @@ import { proxies } from "./use";
 import { WatchingInfos, WatchMode, type WatchInfo } from "./watch";
 
 export const rehookByFunc = <T>(token: symbol, target: ()=>T, effect: (e: T)=>void) => {
-    const watchinfo: WatchInfo<T> = {
-        mode: WatchMode.watchFn,
-        token: token,
-        effect: effect,
-        target
-    }
+    const watchinfo: WatchInfo<T> = [
+        WatchMode.watchFn,
+        token,
+        target,
+        effect
+    ]
     WatchingInfos.push(watchinfo)
     const td = target();
     WatchingInfos.pop();
