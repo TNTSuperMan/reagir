@@ -18,5 +18,6 @@ export const fragment = (children: ()=>FNode[]): FragmentNode =>
     hook(children, fnodes=>{
         before.forEach(()=>entry.nextSibling?.remove())
         entry.after(...(fnodes.map(e=>e.node().node)))
+        before = fnodes.map(e=>e.key)
     })
 }
