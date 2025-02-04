@@ -1,4 +1,4 @@
-import { fragment, seg, t, usePrimitive, useObject, hook } from "../src";
+import { frag, seg, t, usePrimitive, useObject, hook } from "../src";
 
 const Comp = () => {
     const text = usePrimitive("");
@@ -16,7 +16,7 @@ const Comp = () => {
                 list.push(text.value);
             }
         }, t("push")),
-        fragment(()=>list.map(e=>t(e)))
+        frag(()=>list.map(e=>t(e)))
     )
 }
 document.body.appendChild(Comp()[0])
