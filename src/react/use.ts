@@ -2,17 +2,13 @@ import { rehookByFunc } from "./hook";
 import { last } from "./watch";
 
 export const proxies: WeakMap<object, {
-    revoke: ()=>void,
     forceReference: (effect: ()=>void)=>void
 }> = new WeakMap;
-
-export const revoke = (target: object) =>
-    proxies.get(target)?.revoke();
 
 export const useObject = <T extends object>(target: T): T => {
     const forcedDeps: Function[] = [];//target, callback
     let deps: [PropertyKey, symbol, ()=>unknown, (e:unknown)=>void][] = [];
-    const {proxy, revoke} = Proxy.revocable(target, {
+    const proxy = new Proxy(target, {
         get(t, p, r){
             const l = last();
             if(l?.mode == "watchFn" && typeof l.target == "function")
@@ -33,7 +29,6 @@ export const useObject = <T extends object>(target: T): T => {
         }
     })
     proxies.set(proxy, {
-        revoke,
         forceReference(effect){
             forcedDeps.push(effect);
         }
